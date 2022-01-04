@@ -27,6 +27,7 @@ public class CanvasController : MonoBehaviour
     public GameObject startScreen;
     public GameObject gameScene;
     public GameObject gameOverScreen;
+    private float delayItemInstances;
 
     [SerializeField]
     private const float timerCleanAsteroidsOffset = 2f;
@@ -57,10 +58,12 @@ public class CanvasController : MonoBehaviour
 
         if (gameScene.activeInHierarchy)
         {
-            if (asteroidsParent.transform.childCount < maxAsteroids)
+            delayItemInstances += Time.time / 200;
+
+            if (delayItemInstances >= 1f && asteroidsParent.transform.childCount < maxAsteroids)
                 InstanceAsteroid(maxAsteroids - asteroidsParent.transform.childCount);
 
-            if (ufosParent.transform.childCount < maxUfos)
+            if (delayItemInstances >= 10f && ufosParent.transform.childCount < maxUfos)
                 InstanceUfo();
 
             if (Time.time > timerCleanAsteroidsOffset)
@@ -83,7 +86,6 @@ public class CanvasController : MonoBehaviour
                 startScreen.SetActive(true);
             }
         }
-
     }
 
     void OnTriggerExit2D(Collider2D other)
